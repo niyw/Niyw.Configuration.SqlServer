@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Nyw.Configuration.SqlServer.Host.Models;
+using System.Data.SqlClient;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Nyw.Configuration.SqlServer.Host.Controllers {
     public class HomeController : Controller {
-        public readonly IConfiguration _configuration = null;
-        public HomeController(IConfiguration configuration) {
+        private readonly IConfiguration _configuration = null;
+        private readonly IMemoryCache _cache;
+        public HomeController(IConfiguration configuration, IMemoryCache memoryCache) {
             this._configuration = configuration;
+           this._cache = memoryCache;
         }
         public IActionResult Index() {
             return View();
@@ -28,8 +32,12 @@ namespace Nyw.Configuration.SqlServer.Host.Controllers {
         }
 
         public IActionResult Contact() {
-            ViewData["Message"] = "Your contact page.";
-
+            var cacheItem1 = _cache.GetOrCreate(CacheKeys.CacheKey1, entry =>
+            {
+                entry.SetPriority(CacheItemPriority.NeverRemove);
+                return "Hello world";
+            });
+            ViewData[CacheKeys.CacheKey1] = cacheItem1;
             return View();
         }
 
@@ -41,5 +49,9 @@ namespace Nyw.Configuration.SqlServer.Host.Controllers {
         public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+    }
+
+    public static class CacheKeys {
+        public static string CacheKey1 { get { return "_CacheKey1"; } }
     }
 }

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Nyw.Configuration.SqlServer\Nyw.Configuration.SqlServer.csproj" />
+    <ProjectReference Include="..\..\src\Niyw.Configuration.SqlServer\Niyw.Configuration.SqlServer.csproj" />
   </ItemGroup>
 
 </Project>

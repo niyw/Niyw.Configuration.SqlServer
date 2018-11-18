@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C72D11F8-9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{D3FFA7D7-59C9-4B1F-B031-62B23ECD271B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niyw.Configuration.SqlServer.Test", "test\Niyw.Configuration.SqlServer.Test\Niyw.Configuration.SqlServer.Test.csproj", "{4F078D12-68E5-435D-ACBF-84CCF2406CAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niyw.Configuration.SqlServer.Test", "test\Niyw.Configuration.SqlServer.Test\Niyw.Configuration.SqlServer.Test.csproj", "{4F078D12-68E5-435D-ACBF-84CCF2406CAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{102D8749-A89D-40FE-8690-91EC645B4CD8} = {94D3CAD9-3643-4A18-9526-3EAF7FE81E7F}
 		{96B9E1B1-1B09-467A-98DD-70659F8F7786} = {BCE24326-D13D-4B3F-93BE-8A2AFDAB022F}
+		{4F078D12-68E5-435D-ACBF-84CCF2406CAB} = {C72D11F8-92BF-4B36-AC9E-0D2E13A28C8C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A997EB5D-AEA4-4309-96CA-24DE13105674}
