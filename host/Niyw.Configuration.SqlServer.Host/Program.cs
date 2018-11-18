@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Data.SqlClient;
+using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -9,8 +10,10 @@ using Nyw.Configuration.SqlServer;
 
 namespace Nyw.Configuration.SqlServer.Host {
     public class Program {
+        public static string TmpDbStr = string.Empty;
         public static void Main(string[] args) {
             CreateWebHostBuilder(args).Build().Run();
+            SqlDependency.Stop(TmpDbStr);
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
@@ -18,6 +21,8 @@ namespace Nyw.Configuration.SqlServer.Host {
             .ConfigureAppConfiguration((hostingContext, config) => {
                 var builtConfig = config.Build();
                 var dbConnStr = builtConfig.GetConnectionString("AppConfigDB");
+                TmpDbStr = dbConnStr;
+                SqlDependency.Start(TmpDbStr);
                 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
                 config.SetBasePath(Directory.GetCurrentDirectory());
                 config.AddSqlServerConfiguration((options) => {
