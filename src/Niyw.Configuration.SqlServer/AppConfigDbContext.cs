@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Nyw.Configuration.SqlServer {
+namespace Niyw.Configuration.SqlServer {
     public class AppConfigDbContext : DbContext {
         public DbSet<AppKeyValue> KeyValues { get; set; }
         public AppConfigDbContext(DbContextOptions options) : base(options) {

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Nyw.Configuration.SqlServer {
+namespace Niyw.Configuration.SqlServer {
     public static class SqlServerConfigurationExtensions {
         public static IConfigurationBuilder AddSqlServerConfiguration(this IConfigurationBuilder builder,Action<DbContextOptionsBuilder> optionsAction) {
             

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 
-namespace Nyw.Configuration.SqlServer {
+namespace Niyw.Configuration.SqlServer {
     public class SqlServerConfigurationSource: IConfigurationSource {
         private readonly Action<DbContextOptionsBuilder> _optionsAction;
 

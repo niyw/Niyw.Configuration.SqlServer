@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Nyw.Configuration.SqlServer {
+namespace Niyw.Configuration.SqlServer {
     public class AppKeyValue {
         
         public string AppId { get; set; }
