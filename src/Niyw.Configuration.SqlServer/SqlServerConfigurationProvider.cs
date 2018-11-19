@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -7,16 +8,25 @@ using System.Linq;
 
 namespace Niyw.Configuration.SqlServer {
     public class SqlServerConfigurationProvider : ConfigurationProvider {
+
         private Action<DbContextOptionsBuilder> OptionsAction { get; }
         public SqlServerConfigurationProvider(Action<DbContextOptionsBuilder> optionsAction) {
-            OptionsAction = optionsAction;
+            OptionsAction = optionsAction;            
+
             ChangeToken.OnChange(
-                () => new SqlCacheChangeToken()
+                () => new SqlCacheChangeToken(),
+                () => {
+                    System.Threading.Thread.Sleep(5000);
+                    LoadFromSql();
+                }
                 );
         }
 
         // Load config data from EF DB.
         public override void Load() {
+            LoadFromSql();
+        }
+        private void LoadFromSql() {
             var builder = new DbContextOptionsBuilder<AppConfigDbContext>();
             OptionsAction(builder);
             using (var dbContext = new AppConfigDbContext(builder.Options)) {
@@ -26,9 +36,5 @@ namespace Niyw.Configuration.SqlServer {
                     : dbContext.KeyValues.ToDictionary(c => c.Id, c => c.Value);
             }
         }
-        public override bool TryGet(string key, out string value) {
-            return base.TryGet(key, out value);
-        }
-        
     }
 }

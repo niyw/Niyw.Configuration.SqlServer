@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Nyw.Configuration.SqlServer;
+using Niyw.Configuration.SqlServer;
 
 namespace Nyw.Configuration.SqlServer.Host {
     public class Program {
