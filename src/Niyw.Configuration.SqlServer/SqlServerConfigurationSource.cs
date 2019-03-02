@@ -10,6 +10,8 @@ namespace Niyw.Configuration.SqlServer {
         public SqlServerConfigurationSource(Action<DbContextOptionsBuilder> optionsAction, bool reloadOnChange=true,int refreshInterval=5) {            
             _optionsAction = optionsAction;
             ReloadOnChange = reloadOnChange;
+            if (refreshInterval < 5)
+                refreshInterval = 5;
             RefreshInterval = refreshInterval;
         }
 
