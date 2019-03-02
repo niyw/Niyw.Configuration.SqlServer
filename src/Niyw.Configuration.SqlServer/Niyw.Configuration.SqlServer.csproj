@@ -5,10 +5,13 @@
     <Authors>Ni Yanwei</Authors>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Description>How to use: https://github.com/niyw/honeycomb/tree/master/Extensions/Configuration</Description>
-    <RepositoryUrl>https://github.com/niyw/honeycomb/tree/master/Extensions/Configuration</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/niyw/honeycomb/tree/master/Extensions/Configuration</PackageProjectUrl>
+    <Description>How to use: https://github.com/niyw/Niyw.Configuration.SqlServer</Description>
+    <RepositoryUrl>https://github.com/niyw/Niyw.Configuration.SqlServer</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/niyw/Niyw.Configuration.SqlServer</PackageProjectUrl>
     <AssemblyName>Niyw.Configuration.SqlServer</AssemblyName>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
