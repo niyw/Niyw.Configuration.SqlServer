@@ -8,38 +8,56 @@ using System.Threading;
 using Timer = System.Timers.Timer;
 
 namespace Niyw.Configuration.SqlServer {
-    public class SqlServerConfigurationProvider : ConfigurationProvider {
+    public class SqlServerConfigurationProvider : ConfigurationProvider,IDisposable {
         private readonly DbContextOptions<AppConfigDbContext> _dbOptions;
-        private readonly Timer _reloadTimer = new Timer();
+        private readonly Timer _reloadTimer = null;
         private ConfigurationReloadToken _reloadToken = new ConfigurationReloadToken();
-
-        public SqlServerConfigurationProvider(Action<DbContextOptionsBuilder> dbOptionsAction) {
+        private SqlServerConfigurationSource _source = null;
+        private volatile string LastVersion = string.Empty;
+        public SqlServerConfigurationProvider(Action<DbContextOptionsBuilder> dbOptionsAction, SqlServerConfigurationSource source) {
+            _source = source;
             var builder = new DbContextOptionsBuilder<AppConfigDbContext>();
             dbOptionsAction(builder);
             _dbOptions = builder.Options;
-            _reloadTimer.AutoReset = false;
-            _reloadTimer.Interval = TimeSpan.FromSeconds(5).TotalMilliseconds;
-            _reloadTimer.Elapsed += (s, e) => { OnReload(); };
-            ChangeToken.OnChange(() => _reloadToken, Load);
-        }
 
+            if (_source.ReloadOnChange) {
+                _reloadTimer = new Timer();
+                _reloadTimer.AutoReset = false;
+                _reloadTimer.Interval = TimeSpan.FromSeconds(_source.RefreshInterval).TotalMilliseconds;
+                _reloadTimer.Elapsed += (s, e) => { OnReload(); };
+                ChangeToken.OnChange(() => _reloadToken, Load);
+            }
+        }
+               
         public override void Load() {
             try {
-                using (var db = new AppConfigDbContext(_dbOptions)) {
+                using (var configDbContext = new AppConfigDbContext(_dbOptions)) {
+
+                    var lastVersion = configDbContext.GetSum().Result;
+                    if (LastVersion == lastVersion)
+                        return;
+                    LastVersion = lastVersion;
+
                     Data.Clear();
-                    Data = !db.KeyValues.Any()
+                    Data = !configDbContext.KeyValues.Any()
                    ? new Dictionary<string, string>()
-                   : db.KeyValues.AsNoTracking().ToDictionary(c => c.KeyName, c => c.KeyValue);
+                   : configDbContext.KeyValues.AsNoTracking().ToDictionary(c => c.KeyName, c => c.KeyValue);
                 }
             }
             finally {
-                _reloadTimer.Start();
+                _reloadTimer?.Start();
             }
         }
 
         protected new void OnReload() {
-            var previousToken = Interlocked.Exchange(ref _reloadToken, new ConfigurationReloadToken());
-            previousToken.OnReload();
+            if (_source.ReloadOnChange) {
+                var previousToken = Interlocked.Exchange(ref _reloadToken, new ConfigurationReloadToken());
+                previousToken.OnReload();
+            }
+        }
+
+        public void Dispose() {
+            _reloadTimer?.Dispose();
         }
     }
 }
