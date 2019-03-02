@@ -10,24 +10,22 @@ using Niyw.Configuration.SqlServer;
 
 namespace Nyw.Configuration.SqlServer.Host {
     public class Program {
-        public static string TmpDbStr = string.Empty;
+      
         public static void Main(string[] args) {
             CreateWebHostBuilder(args).Build().Run();
-            SqlDependency.Stop(TmpDbStr);
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, config) => {
                 var builtConfig = config.Build();
-                var dbConnStr = builtConfig.GetConnectionString("AppConfigDB");
-                TmpDbStr = dbConnStr;
-                SqlDependency.Start(TmpDbStr);
+                var dbConnStr = builtConfig.GetConnectionString("AppConfigDB");              
                 var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
                 config.SetBasePath(Directory.GetCurrentDirectory());
                 config.AddSqlServerConfiguration((options) => {
                     options.UseSqlServer(dbConnStr, sql => sql.MigrationsAssembly(migrationsAssembly));
                 });
+                var srclist = config;
             })
             .Configure(appBuilder=> {
                 appBuilder.UseSqlServerConfiguration();
